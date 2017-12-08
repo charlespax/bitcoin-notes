@@ -48,9 +48,9 @@ The Rush block header should include a Bitcoin transaction id for the pervious R
 
 ## Rush block
 
-"""
+```
 Hello
-"""
+```
 
 
 # Notes
