@@ -1,0 +1,44 @@
+                    Bitcoin Rush Network
+
+# Description
+This paper describes the Bitcoin Rush Network a Bitcoin layer-2 network designed for large-scale off-chain transactions.
+
+# The Problem
+There are several problems Bitcoin faces.
+
+* Transaction confirmation times. Ten minutes per block. One hour for full confirmation.
+* Limited transaction capacity. Each block is limited to 1 MB
+* Taking transaction and fees off-chain reduces miner incentive to mine Bitcoin
+
+# Ingredients
+The Bitcoin Rush Network utilizes several Blockchian technologies.
+
+* Sidechains
+* Merged mining
+* Two-way peg
+
+## Sidechains
+
+## Merged mining
+I'm not sure if merged mining" is the correct term here. Rush might do something a little different.
+
+On the Rush Network a block is created by whoever created a Bitcoin block. When a miner solves the Bitcoin mainchain puzzle and proposes a new block, they are able to create a new Rush block. This is done by including a transaciton in the Bitcoin network that includes the Rush block header (or maybe just a hash). This makes the Rush network blockchain as immutable as the Bitcoin chain, but does not necessarily provide the same level of security.
+
+## Two-way peg
+While a two-way peg is not strictly necessary for a Rush network implementation, a two-way peg would allow Rush network to act as an integrated Bitcoin layer. There would be no need for an external exchange or trusted third party.
+
+# The Rush Network
+The Rush network is basically a Bitcoin sidechain that reuses as much of the Bitcoin infrastructure as possible.
+
+Rush block header (probably hashes only) are posted to the Bitcoin network as transactions. Any partisipant may post a proposed block header to the Bitcoin blockchain, but only one will be chosen as the try header. How? Maybe by its position in the merlek tree. Because the miner that publishes a new block can define its contents, it has the ultimate power to include whichever Rush block header transaction it cares to. In particular, it can creat its own transaction for inclusion. Thus,
+during Rush network bootstrapping no special Bitcoin miner participation is necessary as they treat the Rush block transaction as a normal transaction. However, there is an incentive for Bitcoin miners to also merge mine Rush.
+
+# Notes
+These are notes while writing this document.
+
+* Can the sidechain be implemented as a series of coinjoin transactoins?
+* There are two options here: 1) One Rush block per Bitcoin block. 2) One Rush block each time a block nonce is found that meets the Rush difficulty, but not necessarily the Bitcoin difficulty. The simple implementation is to have one Rush block per Bitcoin block.
+
+# Icebox Notes
+These notes were generated while writing this document and ar not currently relevant, but may become so.
+* A difficulty window can be used, so the main chain nonce cannot be used. Then there is no incentive to ignore other miner's sub-blocks if you are also a miner.
