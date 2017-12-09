@@ -13,7 +13,7 @@ There are several problems Bitcoin faces.
 # Ingredients
 The Bitcoin Rush Network utilizes several Blockchian technologies.
 
-* Sidechains
+* Sidechain
 * Merged mining
 * Two-way peg
 
@@ -46,18 +46,85 @@ The Rush block header should include a Bitcoin transaction id for the pervious R
 
 # Structure
 
-## Rush block
+## Bitcoin block anatomy
 
 ```
-Hello
+Block
+ * Header
+  - Version
+  - Merkle root
+  - Difficulty
+  - Previous block hash
+  - Timestamp
+  - Nonce
+ * Transaction count
+  - Total bitcoin in + coinbase transaction
+ * Block content
+  - Coinbase Tx
+  - Bitcoin Tx
+    > Technical data
+      * Version
+      * Number of inputs
+      * Lock time
+      * Number of outputs
+    > Inputs
+      * Previous Tx hash / output index
+      * Private unlick script
+      * Script length
+    > Outputs
+      * Amount
+      * Public locking scrit
+      * script length
 ```
 
+## Rush block anatomy
+```
+Block
+ * Header
+  - Rush version
+  - Rush merkle root
+  - Pervious Rush block hash
+  - Previous Bitcoin block hash
+  - Bitcoin Tx id of the previous Rush block
+  - Nonce of Bitcoin block
+ * Transaction count
+  - Total Rush in
+ * Block content
+  - UNUSED: Coinbase Tx
+  - Rush Tx
+    > Technical data
+      * Version
+      * Number of inputs
+      * Lock time
+      * Number of outputs
+    > Inputs
+      * Previous Tx hash / output index
+      * Private unlick script
+      * Script length
+    > Outputs
+      * Amount
+      * Public locking scrit
+      * script length
+```
+The structure of a Rush block is very similar to a Bitcoin block. Timestamp is not necessary because we use the timestamp from the Bitcoin block in which the Rush block header appears. Nonce and Difficulty are not used because they are only relevant to Bitcoin. Coinbase Tx is not used because there is no coinbase in Rush.
 
 # Notes
 These are notes while writing this document.
 
 * Can the sidechain be implemented as a series of coinjoin transactoins?
 * There are two options here: 1) One Rush block per Bitcoin block. 2) One Rush block each time a block nonce is found that meets the Rush difficulty, but not necessarily the Bitcoin difficulty. The simple implementation is to have one Rush block per Bitcoin block.
+* We need a mechanism of exchanging between Bitcoin and Rush. Two-way peg? Maybe take the Rootstock approach. We can have one method that works with the current Bitcoin system without modification. Later replace it with with a more cryptographically secure method.
+* Pick the transaction in the Bitcoin block that includes the lowest Bitcoin hash value. This might allow us to bootsrtap with only a tiny amount of mining power. The miner who finds a golden nonce will be able to have the hash with the lowest difficulty.
+* What happens if a minder chooses to not include transactions with Rush block info? Hopefuly, another miner will take it in a bitcoin blck they mine. It is the same method for any censored Bitcoin transaction.
+* If a miner includes a Rush block header for an invalid block, the next successful miner will simply ignore it and link to the most recent valid Rush block. This could be from the same Bitcoin block. We would just look at the Rush block transaction with the next lowest Bitcoin hash.
+* Lots of people can broadcast Bitcoin Rush block transactions with the lowest hash value they found. They might choose not to if they think it is not sufficiently low enough. They might just quit looking as soon as they hear one on the network that they think is much lower than what they might do. However, they are still looking for the Bitcoin block hash, so this is free anyway.
+* People would not spam the Bitcoin network with Rush block transactions because there is a fee. But anyone can try if they want.
+* There is an incentive for a Rush-enabled miner to simply ignore all Rush block transactions from other miners. However, they will miss out on the fees from these miners. They may as well include them in a block if the transaction fee is good enough.
+* It may become customary to add a Rush transaction as the last transaction in a block. A miner who finds a golden nonce they will immeditely add the golden nonce hash to their block and broadcast it. The miner is likely to include Rush block transactions from other miners if they know they have a lower hash value.
+* Rush-enabled miners are likely to include all Rush block transactions that have a greater value than one they have found themselves.
+* If a miner broadcasts an Bitcin transaction for an invalid Rush block, another miner can include it in their own block and collect the fee. The Rush network will be ignoring that invalid block anyway.
+* If there is a two-way peg, it might be good to have the cross-chain transactions be linked to the Rush block transaction. Maybe this would help if avoid any transactions that roll back the cross-chain exchange.
+* I wonder if Rush transactions can be valid Bitcoin transactions, but with some other information, so they are processed differently. This is how soft forking works.
 
 # Icebox Notes
 These notes were generated while writing this document and ar not currently relevant, but may become so.
